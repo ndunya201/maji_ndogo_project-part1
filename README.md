@@ -40,10 +40,12 @@ SELECT * FROM md_water_services.water_quality LIMIT 5;
 SELECT * FROM md_water_services.well_pollution LIMIT 5;
 SELECT * FROM md_water_services.data_dictionary LIMIT 5;
 
--- Find all unique types of water sources
+2. Water Source Types
+Identify unique types of water sources in the database.
+
+-- Find all unique water source types
 SELECT DISTINCT type_of_water_source
 FROM md_water_services.water_source;
-
 
 
 
