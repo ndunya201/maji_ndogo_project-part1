@@ -39,6 +39,7 @@ SELECT * FROM md_water_services.global_water_access LIMIT 5;
 SELECT * FROM md_water_services.water_quality LIMIT 5;
 SELECT * FROM md_water_services.well_pollution LIMIT 5;
 SELECT * FROM md_water_services.data_dictionary LIMIT 5;
+''' 
 
 2. Water Source Types
 Identify unique types of water sources in the database.
