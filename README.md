@@ -6,6 +6,7 @@ Using SQL queries, I worked with a dataset of **60,000+ survey records** to unco
 ---
 
 ## Project Objectives
+
 - Explore the database structure and foundational tables  
 - Analyze water source types and visits  
 - Assess water quality and flag inconsistencies  
@@ -13,19 +14,23 @@ Using SQL queries, I worked with a dataset of **60,000+ survey records** to unco
 
 ---
 
-##  Database Tables
-The dataset included the following key tables:
-- **location** → Province, town, and location types  
-- **water_source** → Types of water sources and population served  
-- **visits** → Records of visits to water sources, queue times, and employees  
-- **water_quality** → Subjective water quality scores  
-- **well_pollution** → Pollution test results for wells  
+## Database Tables
+
+The dataset includes the following key tables:
+- **location**: Province, town, and location types  
+- **water_source**: Types of water sources and population served  
+- **visits**: Records of visits to water sources, queue times, and employees  
+- **water_quality**: Subjective water quality scores  
+- **well_pollution**: Pollution test results for wells  
 
 ---
 
-##  Key Queries  
+## Key Queries
 
-### 1. Exploring Database Structure  
+### 1. Exploring Database Structure
+
+Preview the database structure and sample data from key tables.
+
 ```sql
 -- Get to know our data
 SHOW TABLES;
@@ -39,18 +44,27 @@ SELECT * FROM md_water_services.global_water_access LIMIT 5;
 SELECT * FROM md_water_services.water_quality LIMIT 5;
 SELECT * FROM md_water_services.well_pollution LIMIT 5;
 SELECT * FROM md_water_services.data_dictionary LIMIT 5;
-''' 
+```
 
-2. Water Source Types
+---
+
+### 2. Water Source Types
+
 Identify unique types of water sources in the database.
 
+```sql
 -- Find all unique water source types
 SELECT DISTINCT type_of_water_source
 FROM md_water_services.water_source;
+```
 
-3. Visits Analysis
+---
+
+### 3. Visits Analysis
+
 Analyze visits to water sources, focusing on long queue times.
 
+```sql
 -- Find visits with queue time exceeding 500 minutes (8+ hours)
 SELECT *
 FROM md_water_services.visits
@@ -60,18 +74,28 @@ WHERE time_in_queue > 500;
 SELECT *
 FROM md_water_services.water_source
 WHERE source_id IN ('AkKi00881224', 'SoRu37635224', 'SoRu36096224', 'AkRu05234224', 'HaZa21742224');
+```
 
-4. Water Quality Checks
+---
+
+### 4. Water Quality Checks
+
 Evaluate water quality for home taps with high quality scores and multiple visits.
 
+```sql
 -- Check for home taps with perfect quality score (10) and multiple visits
 SELECT *
 FROM md_water_services.water_quality
 WHERE subjective_quality_score = 10 AND visit_count >= 2;
+```
 
-5. Pollution Inconsistencies
-Investigate inconsistencies in the well_pollution table.
+---
 
+### 5. Pollution Inconsistencies
+
+Investigate inconsistencies in the `well_pollution` table.
+
+```sql
 -- Preview well_pollution table
 SELECT * 
 FROM md_water_services.well_pollution
@@ -86,10 +110,15 @@ WHERE results = 'Clean' AND biological > 0.01;
 SELECT *
 FROM md_water_services.well_pollution
 WHERE description LIKE 'Clean_%';
+```
 
-6. Pollution Data Corrections
-Correct inconsistencies in the well_pollution table using a temporary copy.
+---
 
+### 6. Pollution Data Corrections
+
+Correct inconsistencies in the `well_pollution` table using a temporary copy.
+
+```sql
 -- Create a copy of the well_pollution table
 CREATE TABLE md_water_services.well_pollution_copy
 AS (SELECT * FROM md_water_services.well_pollution);
@@ -119,10 +148,15 @@ WHERE description = 'Clean Bacteria: Giardia Lamblia';
 UPDATE md_water_services.well_pollution_copy
 SET results = 'Contaminated: Biological'
 WHERE biological > 0.01 AND results = 'Clean';
+```
 
-7. Verify Corrections
+---
+
+### 7. Verify Corrections
+
 Test the corrections and clean up.
 
+```sql
 -- Verify no erroneous rows remain
 SELECT *
 FROM md_water_services.well_pollution_copy
@@ -132,6 +166,16 @@ WHERE description LIKE 'Clean_%'
 -- If corrections are successful, apply changes to the original table and drop the copy
 -- (Uncomment to execute)
 -- DROP TABLE md_water_services.well_pollution_copy;
+```
 
+---
 
+## Notes
 
+- Ensure you have appropriate permissions to modify the database.
+- The `DROP TABLE` statement is commented out to prevent accidental deletion. Uncomment only when ready to finalize changes.
+- Run queries in a test environment before applying to production.
+
+## Contributing
+
+Contributions are welcome! Please submit a pull request with any improvements or additional analyses.
