@@ -1,0 +1,8 @@
+*.sql linguist-detectable=true
+*.sql linguist-language=SQL
+git add .gitattributes
+git commit -m "Add .gitattributes to enable SQL language detection"
+git push origin main  
+git add your-file.sql
+git commit -m "Minor edit to trigger Linguist re-scan"
+git push origin main
